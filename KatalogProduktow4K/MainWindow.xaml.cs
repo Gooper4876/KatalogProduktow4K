@@ -66,12 +66,21 @@ namespace KatalogProduktow4K
 
         private void DodajProdukt(object sender, RoutedEventArgs e)
         {
-            string nazwa = NazwaTextBox.Text;
-            double cena = double.Parse(CenaTextBox.Text);
-            int ilosc = int.Parse(IloscTextBox.Text);
-            string kategoria = KategorieComboBox.SelectedItem as string ?? "brak kategorii";
+            if (double.TryParse(CenaTextBox.Text, out _) == false || int.TryParse(IloscTextBox.Text, out _) == false || NazwaTextBox.Text == "")
+            {
+                MessageBox.Show("Niepoprawne dane!");
+            }
+            else
+            {
+                string nazwa = NazwaTextBox.Text;
+
+                double cena = double.Parse(CenaTextBox.Text);
+                int ilosc = int.Parse(IloscTextBox.Text);
+                string kategoria = KategorieComboBox.SelectedItem as string ?? "brak kategorii";
+
+                produkty.Add(new Produkt { Nazwa = nazwa, Cena = cena, Ilosc = ilosc, Kategoria = kategoria });
+            }
             
-            produkty.Add(new Produkt { Nazwa = nazwa, Cena = cena, Ilosc = ilosc, Kategoria = kategoria});
 
         }
 
@@ -101,6 +110,8 @@ namespace KatalogProduktow4K
             NazwaTextBox.Text = p.Nazwa;
             CenaTextBox.Text = p.Cena.ToString("F2");
             IloscTextBox.Text = p.Ilosc.ToString();
+            WynikTextBlock.Text = $"Wartość magazynu: {p.WartoscMagazynu:F2} zł";
+
         }
 
         private void Zapisz(object sender, RoutedEventArgs e)
